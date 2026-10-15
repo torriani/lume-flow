@@ -37,7 +37,7 @@ Para Intel, use `export LUME_ARCH=x64` antes dos três comandos de compilação/
 
 O motor é fixado a um commit, as dependências npm têm lockfile e os modelos têm SHA-256 verificado. Isso permite reproduzir a receita de build; não garante binários bit a bit idênticos entre SDKs.
 
-`LUME_SDKROOT` e `LUME_CMAKE` são opções de compilação, não dependências da instalação do aluno. O pacote carrega seus próprios binários e modelos. O workflow em `.github/workflows/build.yml` prepara as duas arquiteturas, mas ainda precisa executar no repositório publicado.
+`LUME_SDKROOT` e `LUME_CMAKE` são opções de compilação, não dependências da instalação do aluno. O pacote carrega seus próprios binários e modelos. O workflow em `.github/workflows/build.yml` prepara as duas arquiteturas, mas sua primeira execução foi bloqueada pelo GitHub antes de iniciar os jobs. A validação de CI permanece pendente; veja a matriz de release.
 
 ## Privacidade e distribuição
 

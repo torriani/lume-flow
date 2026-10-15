@@ -13,6 +13,6 @@
 - Execução em hardware Intel e latência nessa arquitetura.
 - Testar macOS 14 e versões posteriores separadamente.
 - Assinatura Developer ID, hardened runtime/entitlements e notarização.
-- Workflow de CI executado no repositório público.
+- Workflow de CI concluído no repositório público. A primeira execução foi bloqueada pelo GitHub antes de iniciar os jobs por indisponibilidade dos runners; builds locais não substituem essa validação.
 
 Pacotes cross-compilados não equivalem a testes em hardware real. Não marcar os itens acima como concluídos apenas por existirem arquivos ou por compilar.
