@@ -1,0 +1,29 @@
+name: Build macOS preview
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        arch: [arm64, x64]
+    env:
+      LUME_ARCH: ${{ matrix.arch }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run native
+      - run: sh scripts/build-engine.sh
+      - run: npm run models
+      - run: npm run package
+      - run: ditto -c -k --sequesterRsrc --keepParent build/releases/LumeFlow-darwin-${{ matrix.arch }}/LumeFlow.app build/LumeFlow-${{ matrix.arch }}.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LumeFlow-${{ matrix.arch }}-unsigned-preview
+          path: build/LumeFlow-${{ matrix.arch }}.zip

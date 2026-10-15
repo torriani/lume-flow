@@ -1,0 +1,28 @@
+{
+  "name": "lume-flow",
+  "productName": "LumeFlow",
+  "version": "0.2.0",
+  "description": "Ditado pessoal com \u00e1udio preservado e vocabul\u00e1rio pr\u00f3prio",
+  "private": true,
+  "main": "src/main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "native": "sh scripts/build-native.sh",
+    "test": "node --test tests/*.test.cjs",
+    "package": "node scripts/package.cjs",
+    "models": "node scripts/download-models.cjs",
+    "source": "node scripts/export-source.cjs"
+  },
+  "devDependencies": {
+    "@electron/packager": "^20.3.0",
+    "electron": "44.7.2"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.2.0",
+    "@fontsource/inter": "^5.2.0"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.13.0"
+  }
+}

@@ -1,0 +1,564 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM ÚNICO: camada semântica de tokens (--ds-*)
+   Documentação: docs/DESIGN-SYSTEM-UNICO.md
+
+   Camadas (direção única, nunca ao contrário):
+     1. BASE      paletas cruas (--azul-*, --champagne-*). Componente NUNCA usa.
+     2. SEMÂNTICO --ds-*: o único contrato que componente pode usar.
+     3. COMPONENTE usa só --ds-* (via var() ou utilitários bg-ds-*, text-ds-*...).
+
+   Tema padrão: DS AZUL (:root e [data-ds="azul"]).
+   Segundo tema: DS CHAMPAGNE ([data-ds="champagne"]), só prévia, não ativado
+   em nenhuma página. Trocar de design system = trocar o atributo data-ds.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. BASE: paletas cruas ─────────────────────────────────────────────── */
+:root {
+  /* DS AZUL (fonte: starter/variants/torriani/tokens.css) */
+  --azul-500: #2B7DE1;
+  --azul-900: #003A70;
+  --azul-preto: #000000;
+  --azul-950: #0A0A0A;
+  --azul-940: #0D0D0D;
+  --azul-925: #111111;
+  --azul-900-neutro: #1A1A1A;
+  --azul-branco: #FFFFFF;
+  --azul-gelo: #DDE4EC;
+  --azul-meta: #8899AA;
+  --azul-erro: #EF4444;
+  --azul-alerta: #F59E0B;
+  --azul-sucesso: #22C55E;
+  --azul-console: #141414;              /* bb-surface-console */
+  --azul-veu: rgba(0, 0, 0, 0.94);      /* bb-surface-overlay */
+  --azul-cinza-prata: #6B6B88;          /* bb-gray-silver */
+  --azul-cinza-medio: #4A4A66;          /* bb-gray-muted */
+  --azul-cinza-escuro: #2D2D44;         /* bb-gray-dim */
+  --azul-cinza-carvao: #1A1A2E;         /* bb-gray-charcoal */
+  --azul-meta-legado: #667788;          /* bb-muted-legacy */
+
+  /* DS CHAMPAGNE (fonte: ~/claude/design-system/src/styles/tokens.css) */
+  --champagne-500: #C9B298;
+  --champagne-ouro: #C9A060;
+  --champagne-000: #0A0A0C;
+  --champagne-050: #131315;
+  --champagne-100: #1C1C20;
+  --champagne-150: #252528;
+  --champagne-borda: #2A2A2F;
+  --champagne-borda-forte: #35353B;
+  --champagne-texto: #F0E6D6;
+  --champagne-texto-2: #A8A29E;
+  --champagne-texto-3: #6B6B6F;
+  --champagne-erro: #D46A6A;
+  --champagne-sucesso: #5CA86E;
+  --champagne-200: #2E2E33;
+  --champagne-azul: #3B82F6;
+  --champagne-roxo: #A855F7;
+  --champagne-veu: rgba(10, 10, 12, 0.94);
+  --champagne-gradiente-hero: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,178,152,0.12) 0%, rgba(168,85,247,0.06) 40%, transparent 70%);
+  --champagne-gradiente-quente: radial-gradient(ellipse 60% 50% at 30% 50%, rgba(201,178,152,0.08) 0%, transparent 70%);
+  --champagne-gradiente-frio: radial-gradient(ellipse 60% 50% at 70% 50%, rgba(168,85,247,0.06) 0%, transparent 70%);
+  --champagne-gradiente-malha: radial-gradient(ellipse at 20% 50%, rgba(201,178,152,0.1) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(168,85,247,0.08) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(6,182,212,0.06) 0%, transparent 50%);
+
+  /* Raios e fontes compartilhados */
+  --base-radius-xs: 2px;
+  --base-radius-sm: 4px;
+  --base-radius-md: 8px;
+  --base-radius-lg: 12px;
+  --base-radius-xl: 16px;
+  --base-radius-2xl: 24px;
+  --base-radius-full: 9999px;
+  --base-font-inter: "Inter", system-ui, -apple-system, sans-serif;
+  --base-font-plex-mono: "IBM Plex Mono", "SFMono-Regular", ui-monospace, monospace;
+  --base-font-made-outer: "MADE Outer Sans", "Made Outer", "Inter", system-ui, sans-serif;
+  --base-font-jetbrains: "JetBrains Mono", ui-monospace, monospace;
+  --base-font-serif: "Source Serif 4", Georgia, serif;
+
+  /* Ouro metálico (borda animada do animated-pill-nav) */
+  --base-ouro-900: #2E1B04;
+  --base-ouro-800: #4A2E0A;
+  --base-ouro-700: #6B4412;
+  --base-ouro-600: #8A5E18;
+  --base-ouro-500: #B37B22;
+  --base-ouro-400: #E6B141;
+  --base-ouro-300: #FFE07A;
+}
+
+/* ── 2a. SEMÂNTICO: tema DS AZUL (padrão) ───────────────────────────────── */
+:root,
+[data-ds="azul"] {
+  --ds-bg: var(--azul-preto);
+  --ds-surface: var(--azul-950);
+  --ds-surface-alt: var(--azul-925);
+  --ds-surface-hover: var(--azul-900-neutro);
+  --ds-surface-muted: var(--azul-940);
+  --ds-ink: var(--azul-preto);       /* tinta: fundo de máximo contraste */
+  --ds-paper: var(--azul-branco);    /* papel: superfície clara */
+
+  --ds-text: var(--azul-branco);
+  --ds-text-soft: var(--azul-gelo);
+  --ds-text-muted: rgba(255, 255, 255, 0.52);
+  --ds-text-meta: var(--azul-meta);
+  --ds-text-subtle: var(--azul-cinza-prata);  /* abaixo do meta: rótulo apagado */
+  --ds-text-faint: var(--azul-cinza-medio);   /* texto desativado */
+  --ds-text-ghost: var(--azul-cinza-escuro);  /* marca d'água, separador em texto */
+
+  --ds-surface-console: var(--azul-console);  /* terminal, console, bloco de prova */
+  --ds-surface-overlay: var(--azul-veu);      /* véu de sobreposição */
+
+  --ds-accent: var(--azul-500);
+  --ds-accent-contrast: var(--azul-branco); /* texto/ícone sobre --ds-accent-strong */
+  --ds-accent-deep: var(--azul-900);
+
+  --ds-border: rgba(221, 228, 236, 0.09);
+  --ds-border-soft: rgba(221, 228, 236, 0.05);
+  --ds-border-strong: rgba(221, 228, 236, 0.15);
+  --ds-border-hover: rgba(221, 228, 236, 0.18);
+  --ds-border-input: rgba(221, 228, 236, 0.12);
+  --ds-border-deep: var(--azul-cinza-carvao); /* aresta escura de moldura */
+
+  /* Padrão glass (vidro) */
+  --ds-surface-glass: rgba(255, 255, 255, 0.03);
+  --ds-surface-glass-soft: rgba(255, 255, 255, 0.02);
+  --ds-surface-glass-hover: rgba(255, 255, 255, 0.06);
+  --ds-border-glass: rgba(255, 255, 255, 0.08);
+  --ds-border-glass-soft: rgba(255, 255, 255, 0.06);
+  --ds-border-glass-hover: rgba(255, 255, 255, 0.12);
+  --ds-glass-blur: 24px;
+
+  --ds-danger: var(--azul-erro);
+  --ds-warning: var(--azul-alerta);
+  --ds-success: var(--azul-sucesso);
+  --ds-info: var(--azul-500);       /* categoria informativa (DS AZUL tem um acento só) */
+  --ds-highlight: var(--azul-500);  /* categoria de destaque (DS AZUL tem um acento só) */
+
+  --ds-radius-xs: var(--base-radius-xs);
+  --ds-radius-sm: var(--base-radius-sm);
+  --ds-radius-md: var(--base-radius-md);
+  --ds-radius-lg: var(--base-radius-lg);
+  --ds-radius-xl: var(--base-radius-xl);
+  --ds-radius-2xl: var(--base-radius-2xl);
+  --ds-radius-full: var(--base-radius-full);
+
+  --ds-font-sans: var(--base-font-inter);
+  --ds-font-mono: var(--base-font-plex-mono);
+  --ds-font-brand: var(--base-font-made-outer); /* só peça de post, nunca web */
+
+  /* Papéis com valor próprio na casca das páginas publicadas (.dark e .light-mode).
+     No DS AZUL padrão eles valem o mesmo que o token irmão indicado. */
+  --ds-on-accent: var(--azul-branco);              /* texto sobre acento sólido (= accent-contrast) */
+  --ds-text-secondary: rgba(255, 255, 255, 0.52);  /* texto secundário (= text-muted) */
+  --ds-text-body: rgba(255, 255, 255, 0.52);       /* corpo de texto longo (= text-muted) */
+  --ds-text-dim: var(--azul-meta);                 /* rodapé e rótulo apagado (= text-meta) */
+  --ds-surface-card: var(--azul-950);              /* cartão e popover (= surface) */
+  --ds-surface-raised: var(--azul-950);            /* hover de botão, ícone em caixa (= surface) */
+  --ds-surface-elevated: var(--azul-950);          /* bloco elevado (= surface) */
+  --ds-surface-sunken: var(--azul-940);            /* faixa apagada, rodapé de tabela (= surface-muted) */
+  --ds-border-field: rgba(221, 228, 236, 0.12);    /* borda de campo (= border-input) */
+  --ds-border-dark: rgba(221, 228, 236, 0.09);     /* borda escura fixa, não muda no modo claro */
+  --ds-focus-ring: color-mix(in srgb, var(--azul-500) 40%, transparent); /* anel de foco (= accent-line) */
+  --ds-gradient-hero: none;                        /* o DS AZUL não usa brilho ambiente */
+  --ds-gradient-warm: none;
+  --ds-gradient-cool: none;
+  --ds-gradient-mesh: none;
+}
+
+/* ── 2a'. Casca das páginas publicadas (<html class="dark">) ───────────────
+   As páginas de venda nasceram no tema .dark antigo. Para que os componentes
+   migrados fiquem idênticos nelas, estes papéis assumem ali os valores do .dark.
+   Dentro de .brandbook-root ou [data-ds] volta o valor do DS AZUL. */
+.dark {
+  --ds-on-accent: var(--azul-preto);
+  --ds-text-secondary: var(--azul-meta);
+  --ds-text-body: var(--azul-gelo);
+  --ds-text-dim: var(--azul-meta-legado);
+  --ds-surface-card: var(--azul-925);
+  --ds-surface-raised: var(--azul-925);
+  --ds-surface-sunken: var(--azul-900-neutro);
+  --ds-border-field: rgba(221, 228, 236, 0.09);
+  --ds-focus-ring: color-mix(in srgb, var(--azul-500) 50%, transparent);
+}
+.brandbook-root,
+[data-ds="azul"] {
+  --ds-on-accent: var(--azul-branco);
+  --ds-text-secondary: rgba(255, 255, 255, 0.52);
+  --ds-text-body: rgba(255, 255, 255, 0.52);
+  --ds-text-dim: var(--azul-meta);
+  --ds-surface-card: var(--azul-950);
+  --ds-surface-raised: var(--azul-950);
+  --ds-surface-sunken: var(--azul-940);
+  --ds-border-field: rgba(221, 228, 236, 0.12);
+  --ds-focus-ring: color-mix(in srgb, var(--azul-500) 40%, transparent);
+}
+
+/* ── 2b. SEMÂNTICO: tema DS CHAMPAGNE (prévia, não ativado) ─────────────── */
+[data-ds="champagne"] {
+  --ds-bg: var(--champagne-000);
+  --ds-surface: var(--champagne-050);
+  --ds-surface-alt: var(--champagne-100);
+  --ds-surface-hover: var(--champagne-150);
+  --ds-surface-muted: var(--champagne-050);
+  --ds-ink: var(--champagne-000);
+  --ds-paper: var(--champagne-texto);
+
+  --ds-text: var(--champagne-texto);
+  --ds-text-soft: var(--champagne-texto);
+  --ds-text-muted: var(--champagne-texto-2);
+  --ds-text-meta: var(--champagne-texto-3);
+  --ds-text-subtle: var(--champagne-texto-3);
+  --ds-text-faint: var(--champagne-borda-forte);
+  --ds-text-ghost: var(--champagne-200);
+
+  --ds-surface-console: var(--champagne-100);
+  --ds-surface-overlay: var(--champagne-veu);
+
+  --ds-accent: var(--champagne-500);
+  --ds-accent-contrast: var(--champagne-000);
+  --ds-accent-deep: var(--champagne-ouro);
+
+  --ds-border: var(--champagne-borda);
+  --ds-border-soft: rgba(255, 255, 255, 0.06);
+  --ds-border-strong: var(--champagne-borda-forte);
+  --ds-border-hover: var(--champagne-500);
+  --ds-border-input: rgba(255, 255, 255, 0.08);
+  --ds-border-deep: var(--champagne-100);
+
+  --ds-surface-glass: rgba(255, 255, 255, 0.03);
+  --ds-surface-glass-soft: rgba(255, 255, 255, 0.02);
+  --ds-surface-glass-hover: rgba(201, 178, 152, 0.08);
+  --ds-border-glass: rgba(255, 255, 255, 0.08);
+  --ds-border-glass-soft: rgba(255, 255, 255, 0.06);
+  --ds-border-glass-hover: rgba(201, 178, 152, 0.25);
+  --ds-glass-blur: 24px;
+
+  --ds-danger: var(--champagne-erro);
+  --ds-warning: var(--champagne-ouro);
+  --ds-success: var(--champagne-sucesso);
+  --ds-info: var(--champagne-azul);
+  --ds-highlight: var(--champagne-roxo);
+
+  --ds-radius-xs: var(--base-radius-sm);
+  --ds-radius-sm: var(--base-radius-md);
+  --ds-radius-md: var(--base-radius-lg);
+  --ds-radius-lg: var(--base-radius-xl);
+  --ds-radius-xl: var(--base-radius-xl);
+  --ds-radius-2xl: var(--base-radius-2xl);
+  --ds-radius-full: var(--base-radius-full);
+
+  --ds-font-sans: var(--base-font-inter);
+  --ds-font-mono: var(--base-font-jetbrains);
+  --ds-font-brand: var(--base-font-serif);
+
+  --ds-on-accent: var(--champagne-000);
+  --ds-text-secondary: var(--champagne-texto-2);
+  --ds-text-body: var(--champagne-texto-2);
+  --ds-text-dim: var(--champagne-texto-3);
+  --ds-surface-card: var(--champagne-050);
+  --ds-surface-raised: var(--champagne-050);
+  --ds-surface-elevated: var(--champagne-050);
+  --ds-surface-sunken: var(--champagne-050);
+  --ds-border-field: rgba(255, 255, 255, 0.08);
+  --ds-border-dark: var(--champagne-borda);
+  --ds-focus-ring: color-mix(in srgb, var(--champagne-500) 40%, transparent);
+  --ds-gradient-hero: var(--champagne-gradiente-hero);
+  --ds-gradient-warm: var(--champagne-gradiente-quente);
+  --ds-gradient-cool: var(--champagne-gradiente-frio);
+  --ds-gradient-mesh: var(--champagne-gradiente-malha);
+
+  /* Ponte: componentes legados que ainda usam --bb-* e tokens shadcn
+     também trocam de tema dentro de um bloco champagne. */
+  --bb-accent: var(--ds-accent);
+  --bb-blue: var(--ds-accent);
+  --bb-flare: var(--ds-accent-deep);
+  --bb-dark: var(--ds-bg);
+  --bb-canvas: var(--ds-bg);
+  --bb-ink: var(--ds-ink);
+  --bb-surface: var(--ds-surface);
+  --bb-surface-alt: var(--ds-surface-alt);
+  --bb-surface-deep: var(--ds-bg);
+  --bb-surface-panel: var(--ds-surface);
+  --bb-surface-console: var(--ds-surface-alt);
+  --bb-surface-hover-strong: var(--ds-surface-hover);
+  --bb-cream: var(--ds-text);
+  --bb-cream-alt: var(--ds-text-soft);
+  --bb-warm-white: var(--ds-text);
+  --bb-cream-ui: var(--ds-text);
+  --bb-muted: var(--ds-text-soft);
+  --bb-dim: var(--ds-text-muted);
+  --bb-meta: var(--ds-text-meta);
+  --bb-border: var(--ds-border);
+  --bb-border-soft: var(--ds-border-soft);
+  --bb-border-strong: var(--ds-border-strong);
+  --bb-border-hover: var(--ds-border-hover);
+  --primary: var(--ds-accent);
+  --primary-foreground: var(--ds-accent-contrast);
+  --background: var(--ds-bg);
+  --foreground: var(--ds-text);
+  --border: var(--ds-border);
+  --card: var(--ds-surface);
+  --card-foreground: var(--ds-text);
+  --popover: var(--ds-surface);
+  --popover-foreground: var(--ds-text);
+  --muted: var(--ds-surface-muted);
+  --muted-foreground: var(--ds-text-muted);
+  --secondary: var(--ds-surface-alt);
+  --secondary-foreground: var(--ds-text);
+  --accent: var(--ds-accent-soft);
+  --accent-foreground: var(--ds-accent);
+  --destructive: var(--ds-danger);
+  --input: var(--ds-border-input);
+  --ring: var(--ds-accent-line);
+  --font-bb-sans: var(--ds-font-sans);
+  --font-bb-mono: var(--ds-font-mono);
+}
+
+/* Ponte do azul: dentro de um bloco [data-ds="azul"] explícito, componentes
+   legados (--bb-* e shadcn) também seguem o DS AZUL. :root não recebe a ponte,
+   para não mexer nas páginas publicadas. */
+[data-ds="azul"] {
+  --bb-accent: var(--ds-accent);
+  --bb-blue: var(--ds-accent);
+  --bb-flare: var(--ds-accent-deep);
+  --bb-dark: var(--ds-bg);
+  --bb-canvas: var(--ds-bg);
+  --bb-ink: var(--ds-ink);
+  --bb-surface: var(--ds-surface);
+  --bb-surface-alt: var(--ds-surface-alt);
+  --bb-surface-deep: var(--ds-bg);
+  --bb-surface-panel: var(--ds-surface-muted);
+  --bb-surface-console: var(--ds-surface-console);
+  --bb-surface-hover-strong: var(--ds-surface-hover);
+  --bb-cream: var(--ds-text);
+  --bb-cream-alt: var(--ds-text-soft);
+  --bb-warm-white: var(--ds-paper);
+  --bb-cream-ui: var(--ds-text);
+  --bb-muted: var(--ds-text-soft);
+  --bb-dim: var(--ds-text-muted);
+  --bb-meta: var(--ds-text-meta);
+  --bb-border: var(--ds-border);
+  --bb-border-soft: var(--ds-border-soft);
+  --bb-border-strong: var(--ds-border-strong);
+  --bb-border-hover: var(--ds-border-hover);
+  --primary: var(--ds-accent);
+  --primary-foreground: var(--ds-accent-contrast);
+  --background: var(--ds-bg);
+  --foreground: var(--ds-text);
+  --border: var(--ds-border);
+  --card: var(--ds-surface);
+  --card-foreground: var(--ds-text);
+  --popover: var(--ds-surface);
+  --popover-foreground: var(--ds-text);
+  --muted: var(--ds-surface-muted);
+  --muted-foreground: var(--ds-text-muted);
+  --secondary: var(--ds-surface-alt);
+  --secondary-foreground: var(--ds-text);
+  --accent: var(--ds-accent-soft);
+  --accent-foreground: var(--ds-accent);
+  --destructive: var(--ds-danger);
+  --input: var(--ds-border-input);
+  --ring: var(--ds-accent-line);
+  --text-primary: var(--ds-text);
+  --text-secondary: var(--ds-text-muted);
+  --text-tertiary: var(--ds-text-meta);
+  --text-muted: var(--ds-text-meta);
+  --bg-base: var(--ds-bg);
+  --bg-elevated: var(--ds-surface);
+  --bg-surface: var(--ds-surface);
+  --bg-surface-hover: var(--ds-surface-hover);
+  color-scheme: dark;
+}
+
+/* ── 2c. SEMÂNTICO: azul claro, acoplado ao tema claro do brandbook ────────
+   O brandbook tem um seletor claro/escuro (data-bb-theme). Dentro dele, os
+   componentes migrados seguem a versão clara do DS AZUL. */
+.brandbook-root[data-bb-theme="secondary"],
+.brandbook-root[data-bb-theme="light"] {
+  --ds-bg: var(--azul-branco);
+  --ds-surface: #F0F4F8;
+  --ds-surface-alt: var(--azul-gelo);
+  --ds-surface-hover: var(--azul-gelo);
+  --ds-surface-muted: #F0F3F7;
+  --ds-text: var(--azul-preto);
+  --ds-text-soft: var(--azul-900);
+  --ds-text-muted: rgba(0, 0, 0, 0.65);
+  --ds-text-meta: #2A4A6A;
+  --ds-surface-console: #E8ECF0;
+  --ds-surface-overlay: rgba(255, 255, 255, 0.94);
+  --ds-border: rgba(0, 58, 112, 0.12);
+  --ds-border-soft: rgba(0, 58, 112, 0.06);
+  --ds-border-strong: rgba(0, 58, 112, 0.20);
+  --ds-border-hover: rgba(0, 58, 112, 0.25);
+  --ds-border-input: rgba(0, 58, 112, 0.15);
+  --ds-surface-glass: rgba(0, 58, 112, 0.03);
+  --ds-surface-glass-soft: rgba(0, 58, 112, 0.02);
+  --ds-surface-glass-hover: rgba(0, 58, 112, 0.06);
+  --ds-border-glass: rgba(0, 58, 112, 0.12);
+  --ds-border-glass-soft: rgba(0, 58, 112, 0.08);
+  --ds-border-glass-hover: rgba(0, 58, 112, 0.20);
+}
+
+/* ── 2c'. SEMÂNTICO: azul claro do LightWrapper (.light-mode) ────────────
+   Páginas "-light" usam .light-mode, que redefine os tokens shadcn. Aqui o
+   mesmo modo claro alimenta os --ds-*, com os valores exatos do .light-mode. */
+.light-mode {
+  --ds-bg: var(--azul-branco);
+  --ds-surface: var(--azul-branco);
+  --ds-surface-alt: var(--azul-gelo);
+  --ds-surface-hover: #F0F3F7;
+  --ds-surface-muted: var(--azul-gelo);
+  --ds-text: var(--azul-preto);
+  --ds-text-soft: var(--azul-900);
+  --ds-text-muted: var(--azul-900);
+  --ds-text-meta: #94A3B8;
+  --ds-on-accent: var(--azul-branco);
+  --ds-text-secondary: var(--azul-900);
+  --ds-text-body: #334155;
+  --ds-text-dim: #94A3B8;
+  --ds-surface-card: var(--azul-branco);
+  --ds-surface-raised: #EEF1F5;
+  --ds-surface-elevated: #F5F7FA;
+  --ds-surface-sunken: var(--azul-gelo);
+  --ds-border-field: rgba(0, 58, 112, 0.06);
+  --ds-focus-ring: rgba(43, 125, 225, 0.5);
+  --ds-surface-console: #E8ECF0;
+  --ds-surface-overlay: rgba(255, 255, 255, 0.94);
+  --ds-border: rgba(0, 58, 112, 0.12);
+  --ds-border-soft: rgba(0, 58, 112, 0.06);
+  --ds-border-strong: rgba(0, 58, 112, 0.20);
+  --ds-border-hover: rgba(0, 58, 112, 0.25);
+  --ds-border-input: rgba(0, 58, 112, 0.06);
+  --ds-surface-glass: rgba(0, 58, 112, 0.03);
+  --ds-surface-glass-soft: rgba(0, 58, 112, 0.02);
+  --ds-surface-glass-hover: rgba(0, 58, 112, 0.06);
+  --ds-border-glass: rgba(0, 58, 112, 0.12);
+  --ds-border-glass-soft: rgba(0, 58, 112, 0.08);
+  --ds-border-glass-hover: rgba(0, 58, 112, 0.20);
+}
+
+/* ── 2d. SEMÂNTICO derivado: recalculado em cada raiz de tema ───────────── */
+:root,
+[data-ds],
+.brandbook-root[data-bb-theme],
+.light-mode,
+.theme-g4 {
+  --ds-accent-strong: color-mix(in srgb, var(--ds-accent) 90%, var(--ds-ink));
+  --ds-accent-stronger: color-mix(in srgb, var(--ds-accent) 80%, var(--ds-ink));
+  --ds-accent-soft: color-mix(in srgb, var(--ds-accent) 10%, transparent);
+  --ds-accent-line: color-mix(in srgb, var(--ds-accent) 40%, transparent);
+  --ds-success-soft: color-mix(in srgb, var(--ds-success) 15%, transparent);
+  --ds-danger-soft: color-mix(in srgb, var(--ds-danger) 15%, transparent);
+  /* paradas do gradiente cônico metálico (borda animada) */
+  --ds-metal-stops: var(--base-ouro-800) 0deg, var(--base-ouro-700) 20deg, var(--base-ouro-400) 45deg, var(--ds-paper) 50deg, var(--base-ouro-300) 55deg, var(--base-ouro-400) 60deg, var(--base-ouro-700) 85deg, var(--base-ouro-900) 110deg, var(--base-ouro-800) 135deg, var(--base-ouro-600) 180deg, var(--base-ouro-500) 225deg, var(--ds-paper) 230deg, var(--base-ouro-400) 235deg, var(--base-ouro-700) 270deg, var(--base-ouro-900) 315deg, var(--base-ouro-800) 360deg;
+  --ds-gradient-divider: linear-gradient(90deg, transparent, var(--ds-accent-line), transparent);
+  --ds-gradient-divider-accent: linear-gradient(90deg, transparent, var(--ds-accent), transparent);
+  --ds-gradient-divider-fade: linear-gradient(90deg, transparent, var(--ds-border-strong), transparent);
+  --ds-glow-neon: 0 0 20px color-mix(in srgb, var(--ds-accent) 25%, transparent), 0 0 60px color-mix(in srgb, var(--ds-accent) 10%, transparent);
+  --ds-glow: 0 0 30px color-mix(in srgb, var(--ds-accent) 20%, transparent), 0 0 60px color-mix(in srgb, var(--ds-accent) 8%, transparent);
+  --ds-glow-info: 0 0 30px color-mix(in srgb, var(--ds-info) 20%, transparent), 0 0 60px color-mix(in srgb, var(--ds-info) 8%, transparent);
+  --ds-glow-highlight: 0 0 30px color-mix(in srgb, var(--ds-highlight) 20%, transparent), 0 0 60px color-mix(in srgb, var(--ds-highlight) 8%, transparent);
+  --ds-text-on-paper: var(--ds-ink);
+  --ds-border-on-ink: color-mix(in srgb, var(--ds-text) 10%, transparent);
+  --ds-border-on-paper: color-mix(in srgb, var(--ds-ink) 10%, transparent);
+}
+
+.light-mode {
+  --ds-accent-soft: rgba(43, 125, 225, 0.15);
+  --ds-accent-line: rgba(43, 125, 225, 0.5);
+}
+
+[data-ds] {
+  font-family: var(--ds-font-sans);
+}
+
+/* ── 2e. Tema G4 (.theme-g4): páginas do Board de Sucesso do Cliente ───────
+   Marca do cliente G4 (navy e dourado). A paleta base --g4-* mora no bloco
+   .theme-g4 de globals.css; aqui ela alimenta os --ds-*. */
+.theme-g4 {
+  --g4-erro: #CF2E2E;
+  --ds-bg: var(--g4-navy);
+  --ds-text: var(--g4-silver);
+  --ds-accent: var(--g4-gold);
+  --ds-accent-contrast: var(--g4-navy-deep);
+  --ds-on-accent: var(--g4-navy-deep);
+  --ds-accent-soft: color-mix(in srgb, var(--g4-gold) 15%, transparent);
+  --ds-text-secondary: color-mix(in srgb, var(--g4-silver) 60%, transparent);
+  --ds-surface-card: color-mix(in srgb, var(--g4-navy) 75%, transparent);
+  --ds-surface-sunken: var(--g4-navy-light);
+  --ds-border: color-mix(in srgb, var(--g4-silver) 8%, transparent);
+  --ds-border-soft: color-mix(in srgb, var(--g4-silver) 5%, transparent);
+  --ds-border-strong: color-mix(in srgb, var(--g4-gold) 20%, transparent);
+  --ds-border-field: color-mix(in srgb, var(--g4-silver) 8%, transparent);
+  --ds-focus-ring: color-mix(in srgb, var(--g4-gold) 50%, transparent);
+  --ds-danger: var(--g4-erro);
+}
+
+/* ── 3. Utilitários Tailwind: bg-ds-*, text-ds-*, border-ds-*, font-ds-* ── */
+@theme inline {
+  --color-ds-bg: var(--ds-bg);
+  --color-ds-surface: var(--ds-surface);
+  --color-ds-surface-alt: var(--ds-surface-alt);
+  --color-ds-surface-hover: var(--ds-surface-hover);
+  --color-ds-surface-muted: var(--ds-surface-muted);
+  --color-ds-surface-glass: var(--ds-surface-glass);
+  --color-ds-surface-glass-soft: var(--ds-surface-glass-soft);
+  --color-ds-surface-glass-hover: var(--ds-surface-glass-hover);
+  --color-ds-ink: var(--ds-ink);
+  --color-ds-paper: var(--ds-paper);
+  --color-ds-text: var(--ds-text);
+  --color-ds-text-soft: var(--ds-text-soft);
+  --color-ds-text-muted: var(--ds-text-muted);
+  --color-ds-text-meta: var(--ds-text-meta);
+  --color-ds-on-accent: var(--ds-on-accent);
+  --color-ds-text-secondary: var(--ds-text-secondary);
+  --color-ds-text-body: var(--ds-text-body);
+  --color-ds-text-dim: var(--ds-text-dim);
+  --color-ds-surface-card: var(--ds-surface-card);
+  --color-ds-surface-raised: var(--ds-surface-raised);
+  --color-ds-surface-elevated: var(--ds-surface-elevated);
+  --color-ds-surface-sunken: var(--ds-surface-sunken);
+  --color-ds-border-field: var(--ds-border-field);
+  --color-ds-border-dark: var(--ds-border-dark);
+  --color-ds-focus-ring: var(--ds-focus-ring);
+  --color-ds-text-subtle: var(--ds-text-subtle);
+  --color-ds-text-faint: var(--ds-text-faint);
+  --color-ds-text-ghost: var(--ds-text-ghost);
+  --color-ds-surface-console: var(--ds-surface-console);
+  --color-ds-surface-overlay: var(--ds-surface-overlay);
+  --color-ds-border-deep: var(--ds-border-deep);
+  --color-ds-success-soft: var(--ds-success-soft);
+  --color-ds-danger-soft: var(--ds-danger-soft);
+  --color-ds-info: var(--ds-info);
+  --color-ds-highlight: var(--ds-highlight);
+  --color-ds-text-on-paper: var(--ds-text-on-paper);
+  --color-ds-accent: var(--ds-accent);
+  --color-ds-accent-strong: var(--ds-accent-strong);
+  --color-ds-accent-stronger: var(--ds-accent-stronger);
+  --color-ds-accent-soft: var(--ds-accent-soft);
+  --color-ds-accent-line: var(--ds-accent-line);
+  --color-ds-accent-contrast: var(--ds-accent-contrast);
+  --color-ds-accent-deep: var(--ds-accent-deep);
+  --color-ds-border: var(--ds-border);
+  --color-ds-border-soft: var(--ds-border-soft);
+  --color-ds-border-strong: var(--ds-border-strong);
+  --color-ds-border-hover: var(--ds-border-hover);
+  --color-ds-border-input: var(--ds-border-input);
+  --color-ds-border-glass: var(--ds-border-glass);
+  --color-ds-border-glass-soft: var(--ds-border-glass-soft);
+  --color-ds-border-glass-hover: var(--ds-border-glass-hover);
+  --color-ds-border-on-ink: var(--ds-border-on-ink);
+  --color-ds-border-on-paper: var(--ds-border-on-paper);
+  --color-ds-danger: var(--ds-danger);
+  --color-ds-warning: var(--ds-warning);
+  --color-ds-success: var(--ds-success);
+
+  --radius-ds-xs: var(--ds-radius-xs);
+  --radius-ds-sm: var(--ds-radius-sm);
+  --radius-ds-md: var(--ds-radius-md);
+  --radius-ds-lg: var(--ds-radius-lg);
+  --radius-ds-xl: var(--ds-radius-xl);
+  --radius-ds-2xl: var(--ds-radius-2xl);
+  --radius-ds-full: var(--ds-radius-full);
+
+  --font-ds-sans: var(--ds-font-sans);
+  --font-ds-mono: var(--ds-font-mono);
+  --font-ds-brand: var(--ds-font-brand);
+}
