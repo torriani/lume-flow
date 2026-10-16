@@ -38,3 +38,7 @@ O código 0.2.1 inclui ícone monocromático próprio na barra de menus, sem o t
 ## Correção de voz baixa e interrupções (código 0.2.1)
 
 Instalada localmente: remoção do descarte por volume, ganho limitado na cópia de reconhecimento, som inicial após prontidão do microfone, cancelamento silencioso e reconexão do monitor sem cancelar a sessão. Teste real do motor com referência sintética reduzida a 1/20 do volume reconheceu a frase; silêncio retornou vazio. A validação com a voz do usuário após a atualização ainda está pendente. Os ZIPs públicos continuam na 0.2.0.
+
+## Colagem e indicador — revisão de 16/10/2026
+
+Código e pacote local atualizados para capturar o destino por sessão ao encerrar, distinguir campo indisponível de destino alterado, habilitar a árvore de acessibilidade de aplicativos Electron e posicionar a barrinha na tela da janela ativa. Testes de política de destino e 20 testes Node aprovados. Teste interativo no Claude e no Claude Code do terminal ainda pendente; compilação não comprova inserção real. A ferramenta de controle do ambiente não permite operar o Terminal.

@@ -51,7 +51,7 @@ Não há transmissão dos ditados a uma API de nuvem no fluxo implementado. Os d
 
 Ao encerrar por Fn, o helper registra PID, nome do aplicativo e elemento AX focado. Para Stop, o main solicita captura do foco; se não houver resposta em 400 ms, salva o texto sem escolher um destino inseguro. O overlay não deve roubar foco.
 
-Antes de colar, o helper compara novamente aplicativo e elemento. Usa a área de transferência e Cmd+V. A restauração do clipboard anterior ocorre após 700 ms apenas se seu conteúdo não mudou nesse intervalo. Campos seguros ou aplicativos com comportamento especial podem rejeitar a colagem.
+Na versão de desenvolvimento, o destino é capturado uma vez ao encerrar, identificado pela sessão. Antes de colar, o helper compara novamente aplicativo e janela. Quando os dois elementos de texto estão disponíveis, eles também precisam coincidir. Se um campo não for exposto por Acessibilidade, há fallback somente dentro da mesma janela identificada. Janela desconhecida ou aplicativo diferente bloqueiam a colagem com motivo específico. Usa a área de transferência e Cmd+V. A restauração do clipboard anterior ocorre após 700 ms apenas se seu conteúdo não mudou nesse intervalo. Campos seguros ou aplicativos com comportamento especial podem rejeitar a colagem.
 
 ## Recuperação
 
@@ -60,3 +60,5 @@ O áudio existente é convertido com `/usr/bin/afconvert` para WAV PCM16 mono 16
 ## Interrupções e sons na 0.2.1
 
 O som inicial toca após o microfone confirmar prontidão. Cancelamentos não tocam o som de conclusão. A reconexão do monitor de teclado preserva a sessão e a soltura de Fn é reconciliada pelo estado físico. Consultas de foco saíram do callback do teclado e têm tempo limite. O arquivo local `events.log` registra somente horário e tipo de evento (prontidão, pedido de encerramento, cancelamento, erro e reconexão), sem áudio ou transcrição; há rotação em 256 KiB com um arquivo anterior.
+
+A barrinha prioriza a tela da janela ativa e usa nível de sobreposição elevado para acompanhar aplicativos em tela cheia. Se a janela não puder ser localizada, usa a tela principal. Teste em cada configuração de monitores.
