@@ -1,0 +1,6 @@
+const test=require('node:test');const assert=require('node:assert/strict');const {EventEmitter}=require('node:events');const {Engine}=require('../src/engine.cjs');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function fake(options={}){const e=new Engine(()=>{}, {idleMs:20,...options});let boots=0;e.boot=async()=>{boots++;e.child=new EventEmitter();const child=e.child;child.kill=()=>setImmediate(()=>{if(e.child===child){e.child=null;e.ready=null;}child.emit('exit');});e.set('ready');};return {e,boots:()=>boots};}
+test('idle engine releases process and starts again on demand',async()=>{const {e,boots}=fake();await e.start();await wait(60);assert.equal(e.child,null);assert.equal(e.state,'sleeping');await e.start();assert.equal(boots(),2);assert.equal(e.state,'ready');await e.close();});
+test('idle timer protects recording and pending transcription',async()=>{let busy=true;const {e}=fake({isBusy:()=>busy});await e.start();await wait(50);assert.ok(e.child);busy=false;e.active=1;await wait(50);assert.ok(e.child);e.active=0;await wait(60);assert.equal(e.child,null);});
+test('restart waits for previous process to exit',async()=>{const {e,boots}=fake();await e.start();const closing=e.close();await e.start();await closing;assert.equal(boots(),2);assert.ok(e.child);await e.close();});

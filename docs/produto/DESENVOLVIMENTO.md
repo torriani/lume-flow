@@ -20,7 +20,7 @@
 | `scripts/` | Build nativo, motor, modelos, empacotamento e exportação |
 | `tests/` | Testes Node e teste C do atalho |
 
-O assistente de importação local acrescenta `import-onboarding.cjs` e `import-worker.cjs`; esses arquivos ainda não fazem parte da release pública documentada. Consulte [versões](VERSOES.md).
+O assistente de importação local acrescenta `import-onboarding.cjs` e `import-worker.cjs`; esses arquivos estão no código de desenvolvimento, mas ainda não fazem parte dos instaladores públicos. Consulte [versões](VERSOES.md).
 
 ## Requisitos para desenvolver
 

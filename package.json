@@ -1,8 +1,8 @@
 {
   "name": "lume-flow",
   "productName": "LumeFlow",
-  "version": "0.2.0",
-  "description": "Ditado pessoal com \u00e1udio preservado e vocabul\u00e1rio pr\u00f3prio",
+  "version": "0.2.1",
+  "description": "Ditado pessoal com áudio preservado e vocabulário próprio",
   "private": true,
   "main": "src/main.cjs",
   "scripts": {

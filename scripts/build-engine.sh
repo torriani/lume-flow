@@ -12,3 +12,5 @@ SDKROOT="$lume_sdk" "$lume_cmake" -S .local/whisper.cpp -B ".local/engine-$lume_
 "$lume_cmake" --build ".local/engine-$lume_arch" --target whisper-server -j 4
 cp ".local/engine-$lume_arch/bin/whisper-server" build/whisper-server
 otool -L build/whisper-server
+
+cp build/whisper-server "build/Lume Server"

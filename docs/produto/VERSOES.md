@@ -2,7 +2,7 @@
 
 Referência: 15/10/2026. “Implementado” não significa “disponível no ZIP público”.
 
-| Recurso | Release pública 0.2.0 | Alterações locais 0.2.1 |
+| Recurso | Release pública 0.2.0 | Código 0.2.1 em desenvolvimento |
 |---|---|---|
 | Fn segurado / Fn + Espaço | Disponível; validado pelo usuário no Mac de desenvolvimento | Mantido |
 | Motor de transcrição | `whisper-server`, carregado ao abrir | `Lume Server`, sob demanda, encerra após inatividade |
@@ -23,10 +23,14 @@ Referência: 15/10/2026. “Implementado” não significa “disponível no ZIP
 - Local: visibilidade do Stop verificada por estados em teste isolado. Ainda requer confirmação visual/funcional na versão instalada após aplicar esse pacote.
 - Local: importação por worker testada com banco sintético. O diálogo de primeira abertura ainda requer teste completo em instalação limpa.
 
-A economia de memória foi aplicada ao Mac de desenvolvimento. O assistente de importação e o novo comportamento do Stop foram preparados depois; não se deve inferir que estão ativos na aplicação aberta ou nos downloads públicos.
+O pacote 0.2.1 foi instalado no Mac de desenvolvimento com economia de memória, assistente de importação, Stop exclusivo do modo fixo e ícone na barra de menus. Fn e Acessibilidade foram reconectados após a atualização. A confirmação visual do Stop e o fluxo de importação em instalação limpa ainda estão pendentes; os downloads públicos permanecem em 0.2.0.
 
 ## Pendências comuns
 
 Notarização e assinatura Developer ID, validação em segundo Mac, hardware Intel e diferentes versões do macOS. O workflow público não concluiu uma compilação: os jobs foram bloqueados antes de iniciar. Consulte a aba Actions para o estado atual; não use esse bloqueio como evidência de falha do código nem como aprovação de CI.
 
 Release disponível: [v0.2.0-preview.1](https://github.com/torriani/lume-flow/releases/tag/v0.2.0-preview.1).
+
+## Interface e colaboração
+
+O código 0.2.1 inclui ícone monocromático próprio na barra de menus, sem o texto “Lume”. Capturas de telas reais com dados fictícios estão no README. O guia de contribuição, modelos de issues e pull requests estão em português; @torriani é o mantenedor indicado em CODEOWNERS. Os instaladores públicos continuam em 0.2.0 até uma nova release.

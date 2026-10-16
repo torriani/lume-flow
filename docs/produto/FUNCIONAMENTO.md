@@ -35,7 +35,7 @@ Cancelamento invalida a sessão, fecha a captura e preserva o áudio recebido. U
 
 ## Motor e memória
 
-Na 0.2.0 pública, o motor é iniciado ao abrir e permanece carregado. Nas alterações locais 0.2.1, inicia ao ditar ou ao preparar explicitamente e entra em repouso após dois minutos sem uso. O timer não encerra durante uma sessão ativa, recuperação ou requisição de transcrição. Um novo início espera o processo anterior terminar se houver encerramento em curso.
+Na 0.2.0 pública, o motor é iniciado ao abrir e permanece carregado. Nas alterações 0.2.1 em desenvolvimento, inicia ao ditar ou ao preparar explicitamente e entra em repouso após dois minutos sem uso. O timer não encerra durante uma sessão ativa, recuperação ou requisição de transcrição. Um novo início espera o processo anterior terminar se houver encerramento em curso.
 
 Abrir/fechar esse processo é uma operação normal do sistema; o custo relevante é recarregar os pesos, alocar memória e preparar o motor. Na 0.2.1, a captura é solicitada sem esperar esse carregamento, mas um ditado curto pode terminar antes de o modelo ficar pronto e esperar pelo texto. Ainda requer validação com microfone real após repouso. Não existe garantia de resposta em menos de um segundo.
 

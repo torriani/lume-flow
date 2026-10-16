@@ -22,7 +22,7 @@ Banco e arquivos de áudio são criados com permissões locais restritas. Isso *
 
 Inclui ferramentas de desenvolvimento para importação. Não apresenta a pergunta automática de primeira abertura. A importação realizada no ambiente do autor não é embarcada na release.
 
-### Assistente local 0.2.1, ainda não publicado
+### Assistente 0.2.1 em desenvolvimento, disponível no código, ainda fora dos instaladores públicos
 
 Na primeira abertura de um perfil elegível, apresenta “Importar histórico” e “Agora não”. Uma importação anterior registrada evita repetir o convite. Recusar não lê o banco do Wispr; a decisão é lembrada. O menu LumeFlow permite tentar depois.
 
