@@ -19,7 +19,7 @@ Não há serviço instalado no launchd nem necessidade de um servidor remoto. O 
 2. O main cria o registro e o WAV antes de solicitar captura.
 3. O renderer solicita o microfone e inicializa áudio mono a 16 kHz. A primeira amostra depende da autorização/dispositivo e da inicialização do AudioContext; não há garantia de atraso zero desde a tecla física.
 4. AudioWorklet converte amostras para PCM16 e envia blocos sequenciados. O main grava o conteúdo e atualiza o cabeçalho WAV incrementalmente.
-5. Após pelo menos três segundos acumulados e 600 ms de silêncio, ou ao atingir 15 segundos, um bloco pode entrar na fila de reconhecimento. O limiar RMS pode descartar fala muito baixa.
+5. No código 0.2.1, após pelo menos três segundos acumulados e um segundo de nível muito baixo (RMS ≤ 0,0005), ou ao atingir 30 segundos, um bloco entra na fila. Nenhum bloco é descartado pelo volume. A cópia enviada ao motor recebe ganho limitado para voz baixa; o WAV original permanece intacto. O detector de voz do motor ainda pode rejeitar áudio e não há garantia de reconhecer toda fala. A prévia pública 0.2.0 usa o filtro antigo.
 6. O motor reconhece os blocos sequencialmente; a sessão guarda as partes.
 7. Ao finalizar, o microfone é fechado, o arquivo sincronizado e a fila drenada.
 8. Regras de vocabulário, formatação, estilo e categoria são aplicadas; texto, duração e diagnóstico são salvos.
@@ -45,7 +45,7 @@ A interface e o helper continuam consumindo memória em repouso. Memória varia 
 
 Modelo padrão: `ggml-large-v3-turbo-q5_0.bin`; VAD: `ggml-silero-v5.1.2.bin`. Português é solicitado explicitamente. O servidor escuta em `127.0.0.1`, numa porta escolhida em execução, com caminho aleatório de 192 bits. Esse caminho reduz acesso casual, mas não é uma fronteira contra processos maliciosos no mesmo usuário/Mac.
 
-Não há transmissão dos ditados a uma API de nuvem no fluxo implementado. Os downloads dos modelos durante o build usam internet. O aplicativo não faz streaming token a token; reconhece blocos. O corte de 15 segundos não tem alinhamento com sobreposição e pode prejudicar palavras nas fronteiras.
+Não há transmissão dos ditados a uma API de nuvem no fluxo implementado. Os downloads dos modelos durante o build usam internet. O aplicativo não faz streaming token a token; reconhece blocos. O corte máximo de 30 segundos na 0.2.1 não tem alinhamento com sobreposição e pode prejudicar palavras nas fronteiras.
 
 ## Foco e colagem
 
@@ -56,3 +56,7 @@ Antes de colar, o helper compara novamente aplicativo e elemento. Usa a área de
 ## Recuperação
 
 O áudio existente é convertido com `/usr/bin/afconvert` para WAV PCM16 mono 16 kHz, validado e reconhecido em blocos de 30 segundos. O registro é atualizado somente após obter texto; falhas preservam texto anterior e áudio. O resultado usa as regras atuais, pode diferir do original e nunca é colado automaticamente.
+
+## Interrupções e sons na 0.2.1
+
+O som inicial toca após o microfone confirmar prontidão. Cancelamentos não tocam o som de conclusão. A reconexão do monitor de teclado preserva a sessão e a soltura de Fn é reconciliada pelo estado físico. Consultas de foco saíram do callback do teclado e têm tempo limite. O arquivo local `events.log` registra somente horário e tipo de evento (prontidão, pedido de encerramento, cancelamento, erro e reconexão), sem áudio ou transcrição; há rotação em 256 KiB com um arquivo anterior.

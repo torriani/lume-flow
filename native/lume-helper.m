@@ -1,20 +1,23 @@
 #import <Cocoa/Cocoa.h>
 #import <ApplicationServices/ApplicationServices.h>
 #import "lume-shortcut.h"
-static CFMachPortRef tap; static BOOL down=NO, enabled=NO, swallowSpace=NO; static BOOL lastSpace=NO; static AXUIElementRef targetElement=NULL; static pid_t targetPID=0;
+static CFMachPortRef tap; static BOOL down=NO, enabled=NO, swallowSpace=NO; static BOOL lastSpace=NO, reconcileFn=NO; static AXUIElementRef targetElement=NULL; static pid_t targetPID=0;
 static void emit(NSDictionary *v){ NSData *d=[NSJSONSerialization dataWithJSONObject:v options:0 error:nil]; @synchronized(NSProcessInfo.processInfo){fwrite(d.bytes,1,d.length,stdout);fputc('\n',stdout);fflush(stdout);} }
-static AXUIElementRef focused(pid_t pid){AXUIElementRef a=AXUIElementCreateApplication(pid); CFTypeRef e=NULL; AXUIElementCopyAttributeValue(a,kAXFocusedUIElementAttribute,&e);CFRelease(a);return (AXUIElementRef)e;}
+static AXUIElementRef focused(pid_t pid){AXUIElementRef a=AXUIElementCreateApplication(pid); AXUIElementSetMessagingTimeout(a,0.15); CFTypeRef e=NULL; AXUIElementCopyAttributeValue(a,kAXFocusedUIElementAttribute,&e);CFRelease(a);return (AXUIElementRef)e;}
 static void arm(void){targetPID=NSWorkspace.sharedWorkspace.frontmostApplication.processIdentifier;if(targetElement)CFRelease(targetElement);targetElement=focused(targetPID);}
 static CGEventRef callback(CGEventTapProxy proxy,CGEventType type,CGEventRef ev,void *ctx){
- if(type==kCGEventTapDisabledByTimeout||type==kCGEventTapDisabledByUserInput){down=NO;emit(@{@"event":@"cancel"});CGEventTapEnable(tap,true);return ev;}
- if(type==kCGEventFlagsChanged && CGEventGetIntegerValueField(ev,kCGKeyboardEventKeycode)==63){BOOL now=(CGEventGetFlags(ev)&kCGEventFlagMaskSecondaryFn)!=0;if(now!=down){down=now;arm();emit(@{@"event":now?@"fn-down":@"fn-up",@"pid":@(targetPID),@"appName":NSWorkspace.sharedWorkspace.frontmostApplication.localizedName?:@"",@"bundleId":NSWorkspace.sharedWorkspace.frontmostApplication.bundleIdentifier?:@""});}}
+ if(type==kCGEventTapDisabledByTimeout||type==kCGEventTapDisabledByUserInput){reconcileFn=YES;emit(@{@"event":@"tap-recovered"});CGEventTapEnable(tap,true);return ev;}
+ if(type==kCGEventFlagsChanged && CGEventGetIntegerValueField(ev,kCGKeyboardEventKeycode)==63){BOOL now=(CGEventGetFlags(ev)&kCGEventFlagMaskSecondaryFn)!=0;if(now!=down){down=now;dispatch_async(dispatch_get_main_queue(),^{arm();emit(@{@"event":now?@"fn-down":@"fn-up",@"pid":@(targetPID),@"appName":NSWorkspace.sharedWorkspace.frontmostApplication.localizedName?:@"",@"bundleId":NSWorkspace.sharedWorkspace.frontmostApplication.bundleIdentifier?:@""});});}}
  if(type==kCGEventKeyUp && CGEventGetIntegerValueField(ev,kCGKeyboardEventKeycode)==49 && swallowSpace){swallowSpace=NO;return NULL;}
- if(type==kCGEventKeyDown && CGEventGetIntegerValueField(ev,kCGKeyboardEventKeycode)==49 && lumeShouldLatch(enabled,down,(CGEventGetFlags(ev)&kCGEventFlagMaskSecondaryFn)!=0)){swallowSpace=YES;if(!CGEventGetIntegerValueField(ev,kCGKeyboardEventAutorepeat))emit(@{@"event":@"fn-space"});return NULL;}
- if(type==kCGEventKeyDown && CGEventGetIntegerValueField(ev,kCGKeyboardEventKeycode)==53)emit(@{@"event":@"cancel"});return ev;
+ if(type==kCGEventKeyDown && CGEventGetIntegerValueField(ev,kCGKeyboardEventKeycode)==49 && lumeShouldLatch(enabled,down,(CGEventGetFlags(ev)&kCGEventFlagMaskSecondaryFn)!=0)){swallowSpace=YES;if(!CGEventGetIntegerValueField(ev,kCGKeyboardEventAutorepeat))dispatch_async(dispatch_get_main_queue(),^{emit(@{@"event":@"fn-space"});});return NULL;}
+ if(type==kCGEventKeyDown && CGEventGetIntegerValueField(ev,kCGKeyboardEventKeycode)==53)emit(@{@"event":@"cancel",@"reason":@"escape"});return ev;
 }
 static void pollShortcut(void){
  BOOL space=CGEventSourceKeyState(kCGEventSourceStateHIDSystemState,49);
- BOOL fn=down || ((CGEventSourceFlagsState(kCGEventSourceStateHIDSystemState)&kCGEventFlagMaskSecondaryFn)!=0);
+ BOOL physicalFn=(CGEventSourceFlagsState(kCGEventSourceStateHIDSystemState)&kCGEventFlagMaskSecondaryFn)!=0;
+ if(reconcileFn && down && !physicalFn){down=NO;arm();emit(@{@"event":@"fn-up",@"pid":@(targetPID),@"appName":NSWorkspace.sharedWorkspace.frontmostApplication.localizedName?:@"",@"bundleId":NSWorkspace.sharedWorkspace.frontmostApplication.bundleIdentifier?:@""});}
+ reconcileFn=NO;
+ BOOL fn=down || physicalFn;
  if(enabled && fn && space && !lastSpace)emit(@{@"event":@"fn-space"});
  lastSpace=space;
 }

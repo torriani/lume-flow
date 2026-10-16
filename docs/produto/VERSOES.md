@@ -18,7 +18,7 @@ Referência: 15/10/2026. “Implementado” não significa “disponível no ZIP
 - Pública: 13 testes automatizados e teste nativo de atalho aprovados localmente antes da publicação.
 - Pública: motores arm64 e x64 testados com áudio sintético e silêncio; x64 executado via Rosetta, não em hardware Intel.
 - Pública: arquivos da release conferidos por tamanho e SHA-256 após upload.
-- Local: 18 testes aprovados, incluindo repouso/reinício e importação sem duplicar dados.
+- Local: 20 testes aprovados, incluindo repouso/reinício e importação sem duplicar dados.
 - Local: encerramento do motor real por inatividade observado; transcrição sintética com `Lume Server` aprovada.
 - Local: visibilidade do Stop verificada por estados em teste isolado. Ainda requer confirmação visual/funcional na versão instalada após aplicar esse pacote.
 - Local: importação por worker testada com banco sintético. O diálogo de primeira abertura ainda requer teste completo em instalação limpa.
@@ -34,3 +34,7 @@ Release disponível: [v0.2.0-preview.1](https://github.com/torriani/lume-flow/re
 ## Interface e colaboração
 
 O código 0.2.1 inclui ícone monocromático próprio na barra de menus, sem o texto “Lume”. Capturas de telas reais com dados fictícios estão no README. O guia de contribuição, modelos de issues e pull requests estão em português; @torriani é o mantenedor indicado em CODEOWNERS. Os instaladores públicos continuam em 0.2.0 até uma nova release.
+
+## Correção de voz baixa e interrupções (código 0.2.1)
+
+Instalada localmente: remoção do descarte por volume, ganho limitado na cópia de reconhecimento, som inicial após prontidão do microfone, cancelamento silencioso e reconexão do monitor sem cancelar a sessão. Teste real do motor com referência sintética reduzida a 1/20 do volume reconheceu a frase; silêncio retornou vazio. A validação com a voz do usuário após a atualização ainda está pendente. Os ZIPs públicos continuam na 0.2.0.
