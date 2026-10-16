@@ -1,5 +1,7 @@
 # Instalação para alunos
 
+Este guia corresponde à [prévia pública 0.2.0](https://github.com/torriani/lume-flow/releases/tag/v0.2.0-preview.1). Veja o [manual completo](produto/MANUAL.md) e as [diferenças das alterações locais](produto/VERSOES.md).
+
 1. Em “Sobre Este Mac”, veja se o processador é Apple M1/M2/M3/M4 ou posterior (arm64) ou Intel (x64). É necessário macOS 14 ou superior.
 2. Extraia o ZIP correspondente e mova LumeFlow.app para Aplicativos. Não use o aplicativo dentro do ZIP.
 3. Abra o LumeFlow e aguarde “Motor pronto”. Os modelos já acompanham o pacote.

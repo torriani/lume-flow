@@ -1,14 +1,16 @@
 # LumeFlow 0.2 — decisões
 
+Visão resumida. A referência detalhada está em [Funcionamento](produto/FUNCIONAMENTO.md) e [Estado das versões](produto/VERSOES.md).
+
 Produto independente do LIA Reuniões. Implementação própria; nenhum bundle ou binário do Wispr foi incorporado.
 
 Electron 44.7.2 contém renderer isolado, preload limitado e main. SQLite nativo do Node fica no main; WAV PCM16 mono 16kHz é persistido incrementalmente, com cabeçalho atualizado a cada pacote. Arquivos não ficam dentro do aplicativo: cada usuário recebe sua pasta Application Support/Lume Flow. O limite inicial é 5 minutos por ditado e o histórico tem paginação de 100 registros e busca por origem.
 
 Helper Objective-C próprio observa flagsChanged para Fn (keycode 63) e Escape. Não suprime a função padrão da tecla: o usuário precisa evitar conflito com ditado macOS/Wispr. O helper verifica PID e elemento AX focado antes de emitir Cmd+V. Reporta envio do evento, não confirmação de texto inserido pelo aplicativo. Não há retry automático. Clipboard anterior só é restaurado se não mudou desde a colagem.
 
-A captura usa AudioWorklet e getUserMedia. Fonte de fixture sintética existe somente no modo desenvolvimento (`!app.isPackaged` e LUME_TEST_FIXTURE); nunca é acionada pelo pacote de distribuição. O indicador é uma janela sem foco, sempre visível e com botão de parar no modo fixo, sem ativar a janela.
+A captura usa AudioWorklet e getUserMedia. Fonte de fixture sintética existe somente no modo desenvolvimento (`!app.isPackaged` e LUME_TEST_FIXTURE); nunca é acionada pelo pacote de distribuição. O indicador é uma janela sem foco, sempre visível e com botão de parar, sem ativar a janela. Na release 0.2.0 o botão também aparece no modo segurado; a alteração local 0.2.1 restringe-o ao modo fixo.
 
-Um servidor whisper.cpp próprio é iniciado pelo main em loopback, porta aleatória e caminho aleatório de 192 bits. O modelo fica carregado. Em pausas (600ms) após ao menos 3s de áudio, ou em 15s, um bloco é enviado ao motor; os resultados permanecem privados até a finalização. Não é streaming token-a-token. Cortes de 15s podem afetar palavras de fronteira e exigem evolução com overlap/alinhamento. Silero VAD no motor filtra silêncio. O limiar RMS atual pode descartar fala muito baixa; precisa calibração com voz real.
+Um servidor whisper.cpp próprio é iniciado pelo main em loopback, porta aleatória e caminho aleatório de 192 bits. Na release 0.2.0, o modelo fica carregado. A alteração local 0.2.1 introduz carregamento sob demanda e encerramento por inatividade. Em pausas (600ms) após ao menos 3s de áudio, ou em 15s, um bloco é enviado ao motor; os resultados permanecem privados até a finalização. Não é streaming token-a-token. Cortes de 15s podem afetar palavras de fronteira e exigem evolução com overlap/alinhamento. Silero VAD no motor filtra silêncio. O limiar RMS atual pode descartar fala muito baixa; precisa calibração com voz real.
 
 Formatação V0: pontuação produzida pelo ASR, capitalização, correções literais por limites Unicode, comandos nova linha/novo tópico e modo de tópicos. Não implementa ainda reorganização semântica por LLM equivalente ao Wispr. Correções alimentam o prompt de vocabulário do ASR e são aplicadas novamente ao texto. Edições não treinam um modelo nem viram regras implicitamente.
 
