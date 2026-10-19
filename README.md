@@ -4,11 +4,11 @@ Ditado local para macOS, em Electron, com Whisper embarcado. Código MIT.
 
 📚 **[Documentação completa do produto](docs/produto/README.md)** — manual, funcionamento, dados, limitações, diagnóstico e desenvolvimento. Consulte também o **[estado de cada versão](docs/produto/VERSOES.md)** antes de procurar recursos nos instaladores.
 
-**Prévia 0.2.0.** Apple Silicon e Intel são alvos de compilação; testes em hardware Intel e em um segundo Mac ainda precisam ser feitos. macOS 14 ou superior. Não há promessa de funcionamento em qualquer Mac. A distribuição atual usa assinatura ad-hoc, sem notarização Apple.
+**Prévia 0.3.0.** Apple Silicon e Intel são alvos de compilação; testes em hardware Intel e em um segundo Mac ainda precisam ser feitos. macOS 14 ou superior. Não há promessa de funcionamento em qualquer Mac. A distribuição atual usa assinatura ad-hoc, sem notarização Apple.
 
 ## Conheça as telas
 
-Capturas reais da versão local 0.2.1 em desenvolvimento, com **dados fictícios de demonstração**. Alguns recursos ainda não estão no instalador público 0.2.0; consulte o [estado das versões](docs/produto/VERSOES.md).
+Capturas reais da versão local 0.2.1 em desenvolvimento, com **dados fictícios de demonstração**. A prévia 0.3.0 reúne essas melhorias; consulte o [estado das versões](docs/produto/VERSOES.md).
 
 ### Histórico: ouvir, copiar e revisar
 
@@ -48,7 +48,7 @@ Você pode modificar e distribuir sua versão sob a licença MIT, ou propor melh
 - Histórico: Ouvir, Copiar e Recuperar (quando houver áudio de uma gravação sem resultado).
 - Preferências: sons, estilo, limpeza de texto, permissões e formato.
 
-**Melhoria 0.2.1 em desenvolvimento, ainda fora da release pública:** o processo **Lume Server** carrega ao iniciar o ditado e encerra após dois minutos sem uso. O primeiro ditado após repouso pode demorar mais; a captura é solicitada sem aguardar o carregamento. Na 0.2.0 publicada o motor permanece carregado.
+**A partir da 0.3.0:** o processo **Lume Server** carrega ao iniciar o ditado e encerra após dois minutos sem uso. O primeiro ditado após repouso pode demorar mais; a captura é solicitada sem aguardar o carregamento. Na 0.2.0 publicada o motor permanece carregado.
 
 Áudio e texto são processados localmente. Não exige assinatura, conta, chave de API, Claude ou Codex. O primeiro carregamento do modelo pode levar dezenas de segundos; velocidade varia com hardware. Não é transcrição de reuniões ao vivo.
 
@@ -78,10 +78,14 @@ O motor é fixado a um commit, as dependências npm têm lockfile e os modelos t
 
 ## Privacidade e distribuição
 
-Dados pessoais ficam em `~/Library/Application Support/Lume Flow`, separados do aplicativo e por usuário macOS. Nenhum histórico, dicionário pessoal, áudio, credencial ou configuração do autor é necessário para executar. **Assistente 0.2.1 em desenvolvimento, disponível no código, ainda fora dos instaladores públicos:** na primeira abertura, oferece importar o histórico local do Wispr Flow, somente após confirmação, e permite tentar depois pelo menu LumeFlow → Importar histórico do Wispr Flow. Na 0.2.0 pública, a importação usa ferramentas de desenvolvimento. Textos, estatísticas e áudios disponíveis são copiados sem alterar o original ou duplicar registros; dados existentes somente na nuvem e áudios ausentes não podem ser recuperados por essa importação.
+Dados pessoais ficam em `~/Library/Application Support/Lume Flow`, separados do aplicativo e por usuário macOS. Nenhum histórico, dicionário pessoal, áudio, credencial ou configuração do autor é necessário para executar. **Assistente da 0.3.0:** na primeira abertura, oferece importar o histórico local do Wispr Flow, somente após confirmação, e permite tentar depois pelo menu LumeFlow → Importar histórico do Wispr Flow. Na 0.2.0 pública, a importação usa ferramentas de desenvolvimento. Textos, estatísticas e áudios disponíveis são copiados sem alterar o original ou duplicar registros; dados existentes somente na nuvem e áudios ausentes não podem ser recuperados por essa importação.
 
 `npm run source` gera `build/LumeFlow-source.zip` por lista permitida de arquivos. Não publique a pasta de trabalho inteira: `.local` contém material privado de desenvolvimento. Não distribua backups pessoais exportados pelo aplicativo.
 
 ## Licenças
 
 Código do aplicativo: [MIT](LICENSE). Dependências e modelos: [NOTICE.md](NOTICE.md) e `docs/licenses`. O código não inclui o aplicativo Wispr, seus sons ou seus serviços.
+
+## Atualizações
+
+A prévia 0.3.0 busca versões novas no GitHub ao abrir e pelo menu **Buscar atualizações**. Oferece o download correto para seu Mac; a substituição do aplicativo ainda é manual por falta do certificado Apple Developer. [Como atualizar e publicar versões](docs/ATUALIZACOES.md). Quem usa a 0.1 ou 0.2 precisa instalar esta versão manualmente.

@@ -1,3 +1,7 @@
+# Estado atual — prévia 0.3.0
+
+A 0.3.0 reúne as correções locais abaixo e adiciona consulta de versões ao abrir e pelo menu. Instalação ainda manual: falta certificado Apple Developer. Consulte [atualizações](../ATUALIZACOES.md). Os registros abaixo são históricos e descrevem a disponibilidade na data indicada. A validação interativa de colagem no segundo Mac continua pendente.
+
 # Estado das versões
 
 Referência: 15/10/2026. “Implementado” não significa “disponível no ZIP público”.
