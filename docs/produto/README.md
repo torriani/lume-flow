@@ -2,7 +2,7 @@
 
 LumeFlow é um aplicativo independente de ditado para macOS. Você fala, o áudio é preservado localmente, o motor produz texto e o aplicativo tenta inseri-lo no campo escolhido. O código é MIT; os modelos e dependências têm suas próprias atribuições em [NOTICE](../../NOTICE.md).
 
-**Referência: 15/10/2026.** Esta documentação diferencia a release pública `v0.2.0-preview.1` das alterações 0.2.1 em desenvolvimento. Não representa certificação de segurança, compatibilidade universal ou equivalência funcional ao Wispr Flow.
+**Referência atual: 18/10/2026.** A prévia 0.3.0 reúne as melhorias antes chamadas de 0.2.1 local nos capítulos abaixo. Consulte [atualizações](../ATUALIZACOES.md) e [estado das versões](VERSOES.md). Não representa certificação de segurança, compatibilidade universal ou equivalência funcional ao Wispr Flow.
 
 ## Por onde começar
 

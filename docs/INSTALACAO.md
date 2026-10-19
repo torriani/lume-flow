@@ -1,6 +1,6 @@
 # Instalação para alunos
 
-Este guia corresponde à [prévia pública 0.2.0](https://github.com/torriani/lume-flow/releases/tag/v0.2.0-preview.1). Veja o [manual completo](produto/MANUAL.md) e as [diferenças das alterações locais](produto/VERSOES.md).
+Este guia corresponde à [prévia pública 0.3.0](https://github.com/torriani/lume-flow/releases/tag/v0.3.0-preview.1). Veja o [manual completo](produto/MANUAL.md) e as [estado das versões](produto/VERSOES.md).
 
 1. Em “Sobre Este Mac”, veja se o processador é Apple M1/M2/M3/M4 ou posterior (arm64) ou Intel (x64). É necessário macOS 14 ou superior.
 2. Extraia o ZIP correspondente e mova LumeFlow.app para Aplicativos. Não use o aplicativo dentro do ZIP.
@@ -15,3 +15,7 @@ Esta prévia não está notarizada. O macOS pode bloquear a abertura ou pedir au
 Nenhum aluno recebe dados do autor. Cada conta macOS cria seu histórico local vazio. Não compartilhe a pasta de dados nem um backup pessoal. O aplicativo permanece local e não envia seu áudio a APIs externas.
 
 Se não inserir o texto, use Copiar no histórico. Se falhar a transcrição, use Recuperar quando houver áudio. Para suporte, envie versão, arquitetura, versão macOS e descrição do erro; não envie gravações pessoais sem necessidade.
+
+## Atualizar uma instalação existente
+
+Na versão 0.1 ou 0.2, baixe e substitua manualmente o aplicativo uma vez. A 0.3.0 consulta novas versões ao abrir e pelo menu **Buscar atualizações**. Por enquanto, a instalação continua manual; confira [o guia de atualização](ATUALIZACOES.md).
